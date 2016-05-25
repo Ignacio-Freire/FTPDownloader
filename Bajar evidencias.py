@@ -25,6 +25,6 @@ for test, name in enumerate(tests):
     os.makedirs(folder)
     for files in filenames:
         file = open(folder + files[0].format(name), 'w')
-        ftp.retrlines("RETR '{}'".format(files[1].format(test + 1)), writeline)
+        ftp.retrlines("RETR '{}'".format(files[1] + '.T{}'.format(test + 1)), writeline)
 
 ftp.quit()
