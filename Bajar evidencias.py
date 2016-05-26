@@ -19,19 +19,22 @@ ftp = FTP(IP)
 ftp.login(user, passwd=passw)
 
 
-def download_files(filesnames):
+def download_files(filesnames, location, **kwargs):
+    names = kwargs.get('name', '')
+    caso = kwargs.get('caso', '')
+
     def writeline(line):
         file.write(line + "\n")
 
     for files in filesnames:
 
         if files[0] == '':
-            file = open(folder + files[1] + '.txt', 'w')
+            file = open(location + files[1] + '.txt', 'w')
         else:
-            file = open(folder + files[0] + ' - {}.txt'.format(name), 'w')
+            file = open(location + files[0] + ' - {}.txt'.format(names), 'w')
 
         if files[2]:
-            retrieve = files[1] + '.T{}'.format(test + 1)
+            retrieve = files[1] + '.T{}'.format(caso)
         else:
             retrieve = files[1]
 
@@ -53,9 +56,10 @@ if tests:
     for test, name in enumerate(tests):
         folder = os.path.expanduser('~/Desktop/{}/Caso {} - {}/'.format(carpeta, test + 1, name))
         os.makedirs(folder)
-        download_files(filelist)
+        download_files(filelist, folder, name=name, caso=test + 1)
 else:
-    download_files(filelist)
+    folder = os.path.expanduser('~/Desktop/{}/'.format(carpeta))
+    download_files(filelist, folder)
 
 ftp.quit()
 
