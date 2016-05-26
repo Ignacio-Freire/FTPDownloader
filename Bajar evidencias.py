@@ -19,20 +19,18 @@ filenames = [('', '', True)]
 ftp = FTP(IP)
 ftp.login(user, passwd=passw)
 
-addtest = True
-
 
 def writeline(line):
     file.write(line + "\n")
 
 try:
-    os.makedirs('PPU {}'.format(req))
+    os.makedirs(os.path.expanduser('~/Desktop/PPU {}'.format(req)))
 except FileExistsError:
-    shutil.rmtree('PPU {}'.format(req))
-    os.makedirs('PPU {}'.format(req))
+    shutil.rmtree(os.path.expanduser('~/Desktop/PPU {}'.format(req)))
+    os.makedirs(os.path.expanduser('~/Desktop/PPU {}'.format(req)))
 
 for test, name in enumerate(tests):
-    folder = 'PPU {}\Caso {} - {}\\'.format(req, test + 1, name)
+    folder = os.path.expanduser('~/Desktop/PPU {}/Caso {} - {}/'.format(req, test + 1, name))
     os.makedirs(folder)
     for files in filenames:
 
