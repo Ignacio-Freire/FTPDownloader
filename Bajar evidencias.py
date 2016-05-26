@@ -1,5 +1,10 @@
 import os
+import shutil
+import time
 from ftplib import FTP
+
+
+start = time.time()
 
 user = ''
 passw = ''
@@ -7,9 +12,9 @@ IP = ''
 
 req = ''
 
-tests = ['', '']
+tests = ['']
 
-filenames = [('', ''), ('', '')]
+filenames = [('', '')]
 
 ftp = FTP(IP)
 ftp.login(user, passwd=passw)
@@ -18,13 +23,23 @@ ftp.login(user, passwd=passw)
 def writeline(line):
     file.write(line + "\n")
 
-os.makedirs('PPU {}'.format(req))
+try:
+    os.makedirs('PPU {}'.format(req))
+except FileExistsError:
+    shutil.rmtree('PPU {}'.format(req))
+    os.makedirs('PPU {}'.format(req))
 
 for test, name in enumerate(tests):
     folder = 'PPU {}\Caso {} - {}\\'.format(req, test + 1, name)
     os.makedirs(folder)
     for files in filenames:
-        file = open(folder + files[0].format(name), 'w')
-        ftp.retrlines("RETR '{}'".format(files[1] + '.T{}'.format(test + 1)), writeline)
+        file = open(folder + files[0] + ' - {}.txt'.format(name), 'w')
+        retrieve = files[1] + '.T{}'.format(test + 1)
+        try:
+            ftp.retrlines("RETR '{}'".format(retrieve), writeline)
+        except:
+            print('Archivo {} no encontrado.'.format(retrieve))
 
 ftp.quit()
+
+print('Tiempo: {:.2f}'.format(time.time()-start))
