@@ -21,7 +21,7 @@ ftp.login(user, passwd=passw)
 
 def download_files(filesnames, location, **kwargs):
     names = kwargs.get('name', '')
-    caso = kwargs.get('caso', '')
+    caso = kwargs.get('caso', 1)
 
     def writeline(line):
         file.write(line + "\n")
@@ -29,9 +29,13 @@ def download_files(filesnames, location, **kwargs):
     for files in filesnames:
 
         if files[0] == '':
-            file = open(location + files[1] + '.txt', 'w')
+            filename = location + files[1] + '.txt'
+        elif tests:
+            filename = location + files[0] + ' - {}.txt'.format(names)
         else:
-            file = open(location + files[0] + ' - {}.txt'.format(names), 'w')
+            filename = location + files[0] + '.txt'
+
+        file = open(filename, 'w')
 
         if files[2]:
             retrieve = files[1] + '.T{}'.format(caso)
@@ -41,7 +45,9 @@ def download_files(filesnames, location, **kwargs):
         try:
             ftp.retrlines("RETR '{}'".format(retrieve), writeline)
         except:
+            file.close()
             print('Archivo {} no encontrado.'.format(retrieve))
+            os.remove(filename)
 
 
 carpeta = 'Archivos descargados' if req == '' else 'PPU {}'.format(req)
