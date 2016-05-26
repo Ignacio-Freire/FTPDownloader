@@ -37,7 +37,7 @@ for test, name in enumerate(tests):
     for files in filenames:
 
         if files[0] == '':
-            file = open(folder + files[1] + 'txt', 'w')
+            file = open(folder + files[1] + '.txt', 'w')
         else:
             file = open(folder + files[0] + ' - {}.txt'.format(name), 'w')
 
