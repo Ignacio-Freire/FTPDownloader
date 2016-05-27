@@ -4,7 +4,7 @@ import gui
 import sys
 import time
 import shutil
-import dill
+import pickle
 import atexit
 from ftplib import FTP
 from time import strftime, localtime
@@ -197,26 +197,21 @@ def reset_all():
 
 
 def save_state():
-    dill.dump_session(filename)
 
+    saveIP = ui.lineIP.text()
+    saveUser = ui.lineUser.text()
+    savePass = ui.linePass.text()
+    saveReq = ui.lineReq.text()
 
-def load_state():
-    dill.load_session(filename)
-
+    with open(filename, 'wb') as f:
+        pickle.dump([tests, filelist, saveIP, savePass, saveReq, saveUser], f)
 
 if __name__ == "__main__":
 
     tests = []
     filelist = []
 
-    global user
-    global passw
-    global IP
-
-    filename = os.path.expanduser('~/Documents/mainframedownloader.pkl')
-
-    if os.path.isfile(filename):
-        load_state()
+    filename = os.path.expanduser('~/Documents/mainframe_downloader_save.pickle')
 
     app = gui.QtWidgets.QApplication(sys.argv)
     MainWindow = gui.QtWidgets.QMainWindow()
@@ -224,7 +219,14 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
 
-    ui.lineIP.setText(IP)
+    if os.path.isfile(filename):
+        with open(filename, 'rb') as f:
+            tests, filelist, loadIP, loadPass, loadReq, loadUser = pickle.load(f)
+
+        ui.lineIP.setText(loadIP)
+        ui.lineUser.setText(loadUser)
+        ui.linePass.setText(loadPass)
+        ui.lineReq.setText(loadReq)
 
     load_casos()
     load_archivos()
