@@ -1,11 +1,18 @@
 # ------------------------------------------------Ignacio Freire-------------------------------------------------------#
 import os
-import shutil
+import gui
 import sys
 import time
+import shutil
+import dill
+import atexit
 from ftplib import FTP
+from time import strftime, localtime
 
-import gui
+
+def print_log(message):
+    log = '[{}] {}'.format(strftime("%H:%M:%S", localtime()), message)
+    ui.plainTextLog.appendPlainText(log)
 
 
 def comenzar_descarga():
@@ -18,68 +25,70 @@ def comenzar_descarga():
     req = ui.lineReq.text()
 
     if IP == '' or user == '' or passw == '':
-        print('Datos de conexion incorrectos o faltantes.')
+        print_log('Datos de conexion incorrectos o faltantes.')
     else:
-
-        ftp = FTP(IP)
-        ftp.login(user, passwd=passw)
-
-        carpeta = 'Archivos descargados' if req == '' else 'PPU {}'.format(req)
-
-        def download_files(filesnames, location, **kwargs):
-            names = kwargs.get('name', '')
-            caso = kwargs.get('caso', 1)
-
-            def writeline(line):
-                file.write(line + "\n")
-
-            for files in filesnames:
-
-                if files[0] == '':
-                    filename = location + files[1] + '.txt'
-                elif tests:
-                    filename = location + files[0] + ' - {}.txt'.format(names)
-                else:
-                    filename = location + files[0] + '.txt'
-
-                file = open(filename, 'w')
-
-                if files[2]:
-                    retrieve = files[1] + '.T{}'.format(caso)
-                else:
-                    retrieve = files[1]
-
-                try:
-                    ftp.retrlines("RETR '{}'".format(retrieve), writeline)
-                except:
-                    file.close()
-                    print('Archivo {} no encontrado.'.format(retrieve))
-                    os.remove(filename)
-
         try:
-            os.makedirs(os.path.expanduser('~/Desktop/{}'.format(carpeta)))
-        except FileExistsError:
-            shutil.rmtree(os.path.expanduser('~/Desktop/{}'.format(carpeta)))
-            os.makedirs(os.path.expanduser('~/Desktop/{}'.format(carpeta)))
+            ftp = FTP(IP)
+            ftp.login(user, passwd=passw)
 
-        if tests:
-            for test, name in enumerate(tests):
-                folder = os.path.expanduser('~/Desktop/{}/Caso {} - {}/'.format(carpeta, test + 1, name))
-                os.makedirs(folder)
-                download_files(filelist, folder, name=name, caso=test + 1)
-        else:
-            folder = os.path.expanduser('~/Desktop/{}/'.format(carpeta))
-            download_files(filelist, folder)
+            carpeta = 'Archivos descargados' if req == '' else 'PPU {}'.format(req)
 
-        ftp.quit()
-        print('Tiempo: {:.2f}'.format(time.time() - start))
+            def download_files(filesnames, location, **kwargs):
+                names = kwargs.get('name', '')
+                caso = kwargs.get('caso', 1)
+
+                def writeline(line):
+                    file.write(line + "\n")
+
+                for files in filesnames:
+
+                    if files[0] == '':
+                        filename = location + files[1] + '.txt'
+                    elif tests:
+                        filename = location + files[0] + ' - {}.txt'.format(names)
+                    else:
+                        filename = location + files[0] + '.txt'
+
+                    file = open(filename, 'w')
+
+                    if files[2]:
+                        retrieve = files[1] + '.T{}'.format(caso)
+                    else:
+                        retrieve = files[1]
+
+                    try:
+                        ftp.retrlines("RETR '{}'".format(retrieve), writeline)
+                    except:
+                        file.close()
+                        print_log('Archivo {} no encontrado.'.format(retrieve))
+                        os.remove(filename)
+
+            try:
+                os.makedirs(os.path.expanduser('~/Desktop/{}'.format(carpeta)))
+            except FileExistsError:
+                shutil.rmtree(os.path.expanduser('~/Desktop/{}'.format(carpeta)))
+                os.makedirs(os.path.expanduser('~/Desktop/{}'.format(carpeta)))
+
+            if tests:
+                for test, name in enumerate(tests):
+                    folder = os.path.expanduser('~/Desktop/{}/Caso {} - {}/'.format(carpeta, test + 1, name))
+                    os.makedirs(folder)
+                    download_files(filelist, folder, name=name, caso=test + 1)
+            else:
+                folder = os.path.expanduser('~/Desktop/{}/'.format(carpeta))
+                download_files(filelist, folder)
+
+            ftp.quit()
+            print_log('Tiempo: {:.2f}'.format(time.time() - start))
+        except:
+            print_log('No connection')
 
 
 def add_caso():
     test = ui.lineCaso.text()
 
     if test == '':
-        print('Campo vacio.')
+        print_log('Campo Caso vacio.')
     else:
         tests.append(test)
         ui.lineCaso.clear()
@@ -92,7 +101,7 @@ def add_archivo():
     tx = True if ui.checkTx.isChecked() else False
 
     if mainframe == '':
-        print('Nombre en Mainframe vacio.')
+        print_log('Nombre en Mainframe vacio.')
     else:
         if nombre == '':
             print('Nombre vacio. Se nombrara como archivo en mainframe.')
@@ -130,7 +139,7 @@ def clear_archivos():
 def borrar_caso():
     index = ui.listPruebas.currentRow()
     if index == -1:
-        print('Seleccionar item.')
+        print_log('Seleccionar item.')
     else:
         tests.pop()
         load_casos()
@@ -139,7 +148,7 @@ def borrar_caso():
 def borrar_archivo():
     index = ui.listArchivos.currentRow()
     if index == -1:
-        print('Seleccionar item.')
+        print_log('Seleccionar item.')
     else:
         filelist.pop(index)
         load_archivos()
@@ -150,9 +159,9 @@ def renombrar_caso():
     index = ui.listPruebas.currentRow()
 
     if new_name == '':
-        print('Ingresar nombre nuevo')
+        print_log('Ingresar nombre nuevo')
     elif index == -1:
-        print('Seleccionar item.')
+        print_log('Seleccionar item.')
     else:
         tests[index] = new_name
         ui.lineCaso.clear()
@@ -167,9 +176,9 @@ def renombrar_archivo():
     new_state = True if ui.checkTx.isChecked() else False
 
     if new_mainframe_name == '':
-        print('Ingresar nombre nuevo.')
+        print_log('Ingresar nombre nuevo.')
     elif index == -1:
-        print('Seleccionar item.')
+        print_log('Seleccionar item.')
     else:
         filelist[index] = (new_name, new_mainframe_name, new_state)
         ui.lineNombre.clear()
@@ -187,15 +196,35 @@ def reset_all():
     ui.checkTx.setCheckState(0)
 
 
+def save_state():
+    dill.dump_session(filename)
+
+
+def load_state():
+    dill.load_session(filename)
+
+
 if __name__ == "__main__":
+
+    tests = []
+    filelist = []
+
+    global user
+    global passw
+    global IP
+
+    filename = os.path.expanduser('~/Documents/mainframedownloader.pkl')
+
+    if os.path.isfile(filename):
+        load_state()
+
     app = gui.QtWidgets.QApplication(sys.argv)
     MainWindow = gui.QtWidgets.QMainWindow()
     ui = gui.Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
 
-    tests = []
-    filelist = []
+    ui.lineIP.setText(IP)
 
     load_casos()
     load_archivos()
@@ -210,7 +239,7 @@ if __name__ == "__main__":
     ui.pushRenameArchivo.clicked.connect(renombrar_archivo)
 
     ui.pushDownload.clicked.connect(comenzar_descarga)
-
     ui.pushClearAll.clicked.connect(reset_all)
 
+    atexit.register(save_state)
     sys.exit(app.exec_())
