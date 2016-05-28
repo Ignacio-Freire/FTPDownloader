@@ -81,7 +81,7 @@ def comenzar_descarga():
             ftp.quit()
             print_log('Tiempo: {:.2f}'.format(time.time() - start))
         except:
-            print_log('No connection')
+            print_log('Error al conectar. Chequear VPN o datos ingresados.')
 
 
 def add_caso():
@@ -194,6 +194,7 @@ def reset_all():
     ui.lineNombreMainframe.clear()
     ui.lineNombre.clear()
     ui.checkTx.setCheckState(0)
+    ui.plainTextLog.clear()
 
 
 def save_state():

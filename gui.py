@@ -136,6 +136,7 @@ class Ui_MainWindow(object):
         self.line_3.setObjectName("line_3")
         self.plainTextLog = QtWidgets.QPlainTextEdit(self.centralwidget)
         self.plainTextLog.setGeometry(QtCore.QRect(10, 450, 611, 161))
+        self.plainTextLog.setTextInteractionFlags(QtCore.Qt.TextSelectableByKeyboard | QtCore.Qt.TextSelectableByMouse)
         self.plainTextLog.setObjectName("plainTextLog")
         self.label.raise_()
         self.lineIP.raise_()
