@@ -49,7 +49,7 @@ class Ui_MainWindow(object):
         self.lineCaso.setGeometry(QtCore.QRect(12, 360, 241, 20))
         self.lineCaso.setObjectName("lineCaso")
         self.lineNombre = QtWidgets.QLineEdit(self.centralwidget)
-        self.lineNombre.setGeometry(QtCore.QRect(271, 360, 141, 20))
+        self.lineNombre.setGeometry(QtCore.QRect(270, 360, 141, 20))
         self.lineNombre.setObjectName("lineNombre")
         self.lineNombreMainframe = QtWidgets.QLineEdit(self.centralwidget)
         self.lineNombreMainframe.setGeometry(QtCore.QRect(420, 360, 171, 20))

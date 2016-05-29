@@ -104,7 +104,7 @@ def add_archivo():
         print_log('Nombre en Mainframe vacio.')
     else:
         if nombre == '':
-            print('Nombre vacio. Se nombrara como archivo en mainframe.')
+            print_log('Nombre vacio. Se nombrara como archivo en mainframe.')
         filelist.append((nombre, mainframe, tx))
         ui.lineNombreMainframe.clear()
         ui.lineNombre.clear()
@@ -233,7 +233,9 @@ if __name__ == "__main__":
     load_archivos()
 
     ui.pushAddPrueba.clicked.connect(add_caso)
+    ui.lineCaso.returnPressed.connect(add_caso)
     ui.pushAddArchivo.clicked.connect(add_archivo)
+    ui.lineNombreMainframe.returnPressed.connect(add_archivo)
     ui.pushClearArchivos.clicked.connect(clear_archivos)
     ui.pushClearPruebas.clicked.connect(clear_pruebas)
     ui.pushDeletePrueba.clicked.connect(borrar_caso)
