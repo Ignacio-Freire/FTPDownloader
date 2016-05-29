@@ -198,7 +198,6 @@ def reset_all():
 
 
 def save_state():
-
     saveIP = ui.lineIP.text()
     saveUser = ui.lineUser.text()
     savePass = ui.linePass.text()
@@ -207,12 +206,13 @@ def save_state():
     with open(filename, 'wb') as f:
         pickle.dump([tests, filelist, saveIP, savePass, saveReq, saveUser], f)
 
+
 if __name__ == "__main__":
 
     tests = []
     filelist = []
 
-    filename = os.path.expanduser('~/Documents/mainframe_downloader_save.pickle')
+    filename = os.path.expanduser('~/Documents/FTPDownloader.pickle')
 
     app = gui.QtWidgets.QApplication(sys.argv)
     MainWindow = gui.QtWidgets.QMainWindow()
