@@ -20,15 +20,15 @@ def comenzar_descarga():
 
     user = ui.lineUser.text()
     passw = ui.linePass.text()
-    IP = ui.lineIP.text()
+    ip = ui.lineIP.text()
 
     req = ui.lineReq.text()
 
-    if IP == '' or user == '' or passw == '':
+    if ip == '' or user == '' or passw == '':
         print_log('Datos de conexion incorrectos o faltantes.')
     else:
         try:
-            ftp = FTP(IP)
+            ftp = FTP(ip)
             ftp.login(user, passwd=passw)
 
             carpeta = 'Archivos descargados' if req == '' else 'PPU {}'.format(req)
@@ -90,7 +90,7 @@ def add_caso():
     if test == '':
         print_log('Campo Caso vacio.')
     else:
-        tests.append(test)
+        tests.append(test.capitalize())
         ui.lineCaso.clear()
         load_casos()
 
@@ -105,7 +105,7 @@ def add_archivo():
     else:
         if nombre == '':
             print_log('Nombre vacio. Se nombrara como archivo en mainframe.')
-        filelist.append((nombre, mainframe, tx))
+        filelist.append((nombre.capitalize(), mainframe.upper(), tx))
         ui.lineNombreMainframe.clear()
         ui.lineNombre.clear()
         load_archivos()
@@ -198,13 +198,17 @@ def reset_all():
 
 
 def save_state():
-    saveIP = ui.lineIP.text()
-    saveUser = ui.lineUser.text()
-    savePass = ui.linePass.text()
-    saveReq = ui.lineReq.text()
+    save_ip = ui.lineIP.text()
+    save_user = ui.lineUser.text()
+    save_pass = ui.linePass.text()
+    save_req = ui.lineReq.text()
 
     with open(filename, 'wb') as f:
-        pickle.dump([tests, filelist, saveIP, savePass, saveReq, saveUser], f)
+        pickle.dump([tests, filelist, save_ip, save_pass, save_req, save_user], f)
+
+
+def about():
+    print_log('\'FTPDownlader 2016\'© - Ignacio Freire')
 
 
 if __name__ == "__main__":
@@ -242,6 +246,8 @@ if __name__ == "__main__":
     ui.pushDeleteArchivo.clicked.connect(borrar_archivo)
     ui.pushRenamePrueba.clicked.connect(renombrar_caso)
     ui.pushRenameArchivo.clicked.connect(renombrar_archivo)
+
+    ui.pushButton.clicked.connect(about)
 
     ui.pushDownload.clicked.connect(comenzar_descarga)
     ui.pushClearAll.clicked.connect(reset_all)

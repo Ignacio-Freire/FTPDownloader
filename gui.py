@@ -7,6 +7,9 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import (QDialog, QGridLayout, QHBoxLayout, QLabel,
+                             QLineEdit, QMessageBox, QPushButton, QTextEdit, QVBoxLayout, QWidget)
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -97,7 +100,7 @@ class Ui_MainWindow(object):
         self.lineReq = QtWidgets.QLineEdit(self.centralwidget)
         self.lineReq.setGeometry(QtCore.QRect(12, 61, 261, 19))
         self.lineReq.setInputMask("")
-        self.lineReq.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        self.lineReq.setAlignment(QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
         self.lineReq.setPlaceholderText("")
         self.lineReq.setObjectName("lineReq")
         self.pushRenameArchivo = QtWidgets.QPushButton(self.centralwidget)
@@ -135,7 +138,7 @@ class Ui_MainWindow(object):
         self.line_3.setObjectName("line_3")
         self.plainTextLog = QtWidgets.QPlainTextEdit(self.centralwidget)
         self.plainTextLog.setGeometry(QtCore.QRect(10, 450, 611, 161))
-        self.plainTextLog.setTextInteractionFlags(QtCore.Qt.TextSelectableByKeyboard|QtCore.Qt.TextSelectableByMouse)
+        self.plainTextLog.setTextInteractionFlags(QtCore.Qt.TextSelectableByKeyboard | QtCore.Qt.TextSelectableByMouse)
         self.plainTextLog.setObjectName("plainTextLog")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setGeometry(QtCore.QRect(617, 635, 16, 16))
@@ -186,12 +189,14 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Mainframe Downloader"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "FTPDownloader"))
         self.label.setText(_translate("MainWindow", "<html><head/><body><p>IP:</p></body></html>"))
         self.label_2.setText(_translate("MainWindow", "<html><head/><body><p>User:</p></body></html>"))
         self.label_3.setText(_translate("MainWindow", "<html><head/><body><p>Password:</p></body></html>"))
-        self.label_4.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt;\">Pruebas</span></p></body></html>"))
-        self.label_5.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt;\">Archivos</span></p></body></html>"))
+        self.label_4.setText(_translate("MainWindow",
+                                        "<html><head/><body><p><span style=\" font-size:10pt;\">Pruebas</span></p></body></html>"))
+        self.label_5.setText(_translate("MainWindow",
+                                        "<html><head/><body><p><span style=\" font-size:10pt;\">Archivos</span></p></body></html>"))
         self.label_6.setText(_translate("MainWindow", "<html><head/><body><p>Caso</p></body></html>"))
         self.label_7.setText(_translate("MainWindow", "<html><head/><body><p>Nombre</p></body></html>"))
         self.label_8.setText(_translate("MainWindow", "<html><head/><body><p>Archivo en Mainframe</p></body></html>"))
@@ -201,12 +206,14 @@ class Ui_MainWindow(object):
         self.pushClearPruebas.setText(_translate("MainWindow", "Reset"))
         self.pushClearAll.setText(_translate("MainWindow", "Reset"))
         self.pushDownload.setText(_translate("MainWindow", "Descargar"))
-        self.label_9.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-weight:600;\">.Tx</span></p></body></html>"))
-        self.label_10.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-weight:600;\">Log</span></p></body></html>"))
-        self.label_11.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt;\">Requerimiento</span></p></body></html>"))
+        self.label_9.setText(_translate("MainWindow",
+                                        "<html><head/><body><p><span style=\" font-weight:600;\">.Tx</span></p></body></html>"))
+        self.label_10.setText(_translate("MainWindow",
+                                         "<html><head/><body><p><span style=\" font-weight:600;\">Log</span></p></body></html>"))
+        self.label_11.setText(_translate("MainWindow",
+                                         "<html><head/><body><p><span style=\" font-size:10pt;\">Requerimiento</span></p></body></html>"))
         self.pushRenameArchivo.setText(_translate("MainWindow", "Renombrar"))
         self.pushDeleteArchivo.setText(_translate("MainWindow", "Eliminar"))
         self.pushAddArchivo.setText(_translate("MainWindow", "Agregar"))
         self.pushClearArchivos.setText(_translate("MainWindow", "Reset"))
         self.pushButton.setText(_translate("MainWindow", "i"))
-
