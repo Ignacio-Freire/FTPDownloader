@@ -6,7 +6,7 @@ import time
 import shutil
 import pickle
 import atexit
-from ftplib import FTP
+from ftplib import FTP, all_errors
 from time import strftime, localtime
 
 
@@ -16,7 +16,6 @@ def print_log(message):
 
 
 def inicio_descarga():
-
     start = time.time()
 
     return_code = True
@@ -40,7 +39,7 @@ def inicio_descarga():
         os.makedirs(carpeta_caso)
         return_code = descargar(test_files, carpeta_caso, nombre_caso=nombre, num_caso=caso + 1)
 
-        if return_code == False:
+        if not return_code:
             break
 
     if return_code:
@@ -66,7 +65,7 @@ def descargar(archivos, path, **kwargs):
         try:
             ftp = FTP(ip)
             ftp.login(user, passwd=passw)
-        except:
+        except all_errors:
             print_log('Error en la conexión al servidor. Chequear datos, VPN o red.')
             return False
 
@@ -88,7 +87,7 @@ def descargar(archivos, path, **kwargs):
 
             try:
                 ftp.retrlines(command, writeline)
-            except:
+            except all_errors:
                 file.close()
                 print_log('Archivo {} no encontrado.'.format(files[1]))
                 os.remove(archivo_nuevo)
@@ -96,6 +95,7 @@ def descargar(archivos, path, **kwargs):
         ftp.quit()
 
     return True
+
 
 def add_caso():
     test = ui.lineCaso.text()
