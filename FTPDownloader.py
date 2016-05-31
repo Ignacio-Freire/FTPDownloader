@@ -1,4 +1,4 @@
-# ------------------------------------------------Ignacio Freire-------------------------------------------------------#
+# ------------------------------------------------Ignacio Freire------------------------------------------------------ #
 import os
 import gui
 import sys
@@ -218,8 +218,8 @@ def save_state():
     save_pass = ui.linePass.text()
     save_req = ui.lineReq.text()
 
-    with open(filename, 'wb') as f:
-        pickle.dump([tests, filelist, save_ip, save_pass, save_req, save_user], f)
+    with open(filename, 'wb') as s:
+        pickle.dump([tests, filelist, save_ip, save_pass, save_req, save_user], s)
 
 
 def about():
