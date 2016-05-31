@@ -9,6 +9,8 @@ import atexit
 from ftplib import FTP
 from time import strftime, localtime
 
+import test
+
 
 def print_log(message):
     log = '[{}] {}'.format(strftime("%H:%M:%S", localtime()), message)
@@ -105,7 +107,7 @@ def add_archivo():
     else:
         if nombre == '':
             print_log('Nombre vacio. Se nombrara como archivo en mainframe.')
-        filelist.append((nombre.capitalize(), mainframe.upper(), tx))
+        filelist.append((nombre, mainframe.upper(), tx))
         ui.lineNombreMainframe.clear()
         ui.lineNombre.clear()
         load_archivos()
@@ -121,7 +123,7 @@ def load_archivos():
     ui.listArchivos.clear()
     for item in filelist:
         ui.listArchivos.addItem(
-            '{} - {}   - {}'.format(item[0].capitalize(), item[1].upper(), 'Tx' if item[2] == True else 'Único'))
+            '{} - {}   - {}'.format(item[0], item[1].upper(), 'Tx' if item[2] == True else 'Único'))
 
 
 def clear_pruebas():
