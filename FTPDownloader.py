@@ -16,6 +16,7 @@ def print_log(message):
 
 
 def inicio_descarga():
+    print_log('Comenzando descargas.')
     start = time.time()
 
     return_code = True
@@ -45,6 +46,7 @@ def inicio_descarga():
     if return_code:
         descargar(singe_files, carpeta_base)
 
+    print_log('Descargas finalizadas.')
     print_log('Tiempo: {:.2f}'.format(time.time() - start))
 
 
@@ -61,38 +63,39 @@ def descargar(archivos, path, **kwargs):
 
     if ip == '' or user == '' or passw == '':
         print_log('Datos de conexion incorrectos o faltantes.')
-    else:
+        return False
+
+    try:
+        ftp = FTP(ip)
+        ftp.login(user, passwd=passw)
+    except all_errors:
+        print_log('Error en la conexión al servidor. Chequear datos, VPN o red.')
+        return False
+
+    for files in archivos:
+        if nombre_caso != '' and num_caso != '':
+            archivo = '{} - {}.txt'.format(files[1] if files[0] == '' else files[0], nombre_caso)
+            command = 'RETR \'{}.T{}\''.format(files[1], num_caso)
+        else:
+            archivo = '{}.txt'.format(files[1] if files[0] == '' else files[0])
+            command = 'RETR \'{}\''.format(files[1])
+
+        archivo_nuevo = path + archivo
+
         try:
-            ftp = FTP(ip)
-            ftp.login(user, passwd=passw)
+            file = open(archivo_nuevo, 'w')
+        except FileExistsError:
+            os.remove(archivo_nuevo)
+            file = open(archivo_nuevo, 'w')
+
+        try:
+            ftp.retrlines(command, writeline)
         except all_errors:
-            print_log('Error en la conexión al servidor. Chequear datos, VPN o red.')
-            return False
+            file.close()
+            print_log('Archivo {} no encontrado.'.format(files[1]))
+            os.remove(archivo_nuevo)
 
-        for files in archivos:
-            if nombre_caso != '' and num_caso != '':
-                archivo = '{} - {}.txt'.format(files[1] if files[0] == '' else files[0], nombre_caso)
-                command = 'RETR \'{}.T{}\''.format(files[1], num_caso)
-            else:
-                archivo = '{}.txt'.format(files[1] if files[0] == '' else files[0])
-                command = 'RETR \'{}\''.format(files[1])
-
-            archivo_nuevo = path + archivo
-
-            try:
-                file = open(archivo_nuevo, 'w')
-            except FileExistsError:
-                os.remove(archivo_nuevo)
-                file = open(archivo_nuevo, 'w')
-
-            try:
-                ftp.retrlines(command, writeline)
-            except all_errors:
-                file.close()
-                print_log('Archivo {} no encontrado.'.format(files[1]))
-                os.remove(archivo_nuevo)
-
-        ftp.quit()
+    ftp.quit()
 
     return True
 
