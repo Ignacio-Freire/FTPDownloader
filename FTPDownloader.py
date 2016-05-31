@@ -23,7 +23,7 @@ def inicio_descarga():
 
     req = ui.lineReq.text()
 
-    nombre_carpeta = 'Archivos descargados' if req == '' else req
+    nombre_carpeta = req if req else 'Archivos descargados'
     carpeta_base = os.path.expanduser('~/Desktop/{}/'.format(nombre_carpeta))
 
     try:
@@ -45,9 +45,8 @@ def inicio_descarga():
 
     if return_code:
         descargar(singe_files, carpeta_base)
-
-    print_log('Descargas finalizadas.')
-    print_log('Tiempo: {:.2f}'.format(time.time() - start))
+        print_log('Descargas finalizadas.')
+        print_log('Tiempo: {:.2f}'.format(time.time() - start))
 
 
 def descargar(archivos, path, **kwargs):
@@ -61,7 +60,7 @@ def descargar(archivos, path, **kwargs):
     def writeline(line):
         file.write(line + "\n")
 
-    if ip == '' or user == '' or passw == '':
+    if not ip or not user or not passw:
         print_log('Datos de conexion incorrectos o faltantes.')
         return False
 
@@ -73,11 +72,11 @@ def descargar(archivos, path, **kwargs):
         return False
 
     for files in archivos:
-        if nombre_caso != '' and num_caso != '':
-            archivo = '{} - {}.txt'.format(files[1] if files[0] == '' else files[0], nombre_caso)
+        if nombre_caso and num_caso:
+            archivo = '{} - {}.txt'.format(files[0] if files[0] else files[1], nombre_caso)
             command = 'RETR \'{}.T{}\''.format(files[1], num_caso)
         else:
-            archivo = '{}.txt'.format(files[1] if files[0] == '' else files[0])
+            archivo = '{}.txt'.format(files[0] if files[0] else files[1])
             command = 'RETR \'{}\''.format(files[1])
 
         archivo_nuevo = path + archivo
@@ -103,12 +102,12 @@ def descargar(archivos, path, **kwargs):
 def add_caso():
     test = ui.lineCaso.text()
 
-    if test == '':
-        print_log('Campo Caso vacio.')
-    else:
+    if test:
         tests.append(test.capitalize())
         ui.lineCaso.clear()
         load_casos()
+    else:
+        print_log('Campo Caso vacio.')
 
 
 def add_archivo():
@@ -116,15 +115,15 @@ def add_archivo():
     nombre = ui.lineNombre.text()
     tx = True if ui.checkTx.isChecked() else False
 
-    if mainframe == '':
-        print_log('Nombre en Mainframe vacio.')
-    else:
-        if nombre == '':
+    if mainframe:
+        if not nombre:
             print_log('Nombre vacio. Se nombrara como archivo en mainframe.')
         filelist.append((nombre, mainframe.upper(), tx))
         ui.lineNombreMainframe.clear()
         ui.lineNombre.clear()
         load_archivos()
+    else:
+        print_log('Nombre en Mainframe vacio.')
 
 
 def load_casos():
@@ -174,7 +173,7 @@ def renombrar_caso():
     new_name = ui.lineCaso.text()
     index = ui.listPruebas.currentRow()
 
-    if new_name == '':
+    if not new_name:
         print_log('Ingresar nombre nuevo')
     elif index == -1:
         print_log('Seleccionar item.')
@@ -191,7 +190,7 @@ def renombrar_archivo():
     new_mainframe_name = ui.lineNombreMainframe.text()
     new_state = True if ui.checkTx.isChecked() else False
 
-    if new_mainframe_name == '':
+    if not new_mainframe_name:
         print_log('Ingresar nombre nuevo.')
     elif index == -1:
         print_log('Seleccionar item.')
