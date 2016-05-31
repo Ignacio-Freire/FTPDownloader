@@ -9,22 +9,49 @@ import atexit
 from ftplib import FTP
 from time import strftime, localtime
 
-import test
-
 
 def print_log(message):
     log = '[{}] {}'.format(strftime("%H:%M:%S", localtime()), message)
     ui.plainTextLog.appendPlainText(log)
 
 
-def comenzar_descarga():
+def inicio_descarga():
     start = time.time()
+
+    req = ui.lineReq.text()
+
+    nombre_carpeta = 'Archivos descargados' if req == '' else req
+    carpeta_base = os.path.expanduser('~/Desktop/{}/'.format(nombre_carpeta))
+
+    try:
+        os.makedirs(carpeta_base)
+    except FileExistsError:
+        shutil.rmtree(carpeta_base)
+        os.makedirs(carpeta_base)
+
+    test_files = [i for i in filelist if i[2] == True]
+    singe_files = [i for i in filelist if i[2] == False]
+
+    for caso, nombre in enumerate(tests):
+        carpeta_caso = carpeta_base + 'Caso {} - {}/'.format(caso + 1, nombre)
+        os.makedirs(carpeta_caso)
+        descargar(test_files, carpeta_caso, nombre_caso=nombre, num_caso=caso + 1)
+
+    descargar(singe_files, carpeta_base)
+
+    print_log('Tiempo: {:.2f}'.format(time.time() - start))
+
+
+def descargar(archivos, path, **kwargs):
+    nombre_caso = kwargs.get('nombre_caso', '')
+    num_caso = kwargs.get('num_caso', 1)
 
     user = ui.lineUser.text()
     passw = ui.linePass.text()
     ip = ui.lineIP.text()
 
-    req = ui.lineReq.text()
+    def writeline(line):
+        file.write(line + "\n")
 
     if ip == '' or user == '' or passw == '':
         print_log('Datos de conexion incorrectos o faltantes.')
@@ -32,58 +59,34 @@ def comenzar_descarga():
         try:
             ftp = FTP(ip)
             ftp.login(user, passwd=passw)
+        except:
+            print_log('Error en la conexión al servidor. Chequear datos, VPN o red.')
+            pass
 
-            carpeta = 'Archivos descargados' if req == '' else 'PPU {}'.format(req)
+        for files in archivos:
+            if nombre_caso != '' and num_caso != '':
+                archivo = '{} - {}.txt'.format(files[1] if files[0] == '' else files[0], nombre_caso)
+                command = 'RETR \'{}.T{}\''.format(files[1], num_caso)
+            else:
+                archivo = '{}.txt'.format(files[1] if files[0] == '' else files[0])
+                command = 'RETR \'{}\''.format(files[1])
 
-            def download_files(filesnames, location, **kwargs):
-                names = kwargs.get('name', '')
-                caso = kwargs.get('caso', 1)
-
-                def writeline(line):
-                    file.write(line + "\n")
-
-                for files in filesnames:
-
-                    if files[0] == '':
-                        filename = location + files[1] + '.txt'
-                    elif tests:
-                        filename = location + files[0] + ' - {}.txt'.format(names)
-                    else:
-                        filename = location + files[0] + '.txt'
-
-                    file = open(filename, 'w')
-
-                    if files[2]:
-                        retrieve = files[1] + '.T{}'.format(caso)
-                    else:
-                        retrieve = files[1]
-
-                    try:
-                        ftp.retrlines("RETR '{}'".format(retrieve), writeline)
-                    except:
-                        file.close()
-                        print_log('Archivo {} no encontrado.'.format(retrieve))
-                        os.remove(filename)
+            archivo_nuevo = path + archivo
 
             try:
-                os.makedirs(os.path.expanduser('~/Desktop/{}'.format(carpeta)))
+                file = open(archivo_nuevo, 'w')
             except FileExistsError:
-                shutil.rmtree(os.path.expanduser('~/Desktop/{}'.format(carpeta)))
-                os.makedirs(os.path.expanduser('~/Desktop/{}'.format(carpeta)))
+                os.remove(archivo_nuevo)
+                file = open(archivo_nuevo, 'w')
 
-            if tests:
-                for test, name in enumerate(tests):
-                    folder = os.path.expanduser('~/Desktop/{}/Caso {} - {}/'.format(carpeta, test + 1, name))
-                    os.makedirs(folder)
-                    download_files(filelist, folder, name=name, caso=test + 1)
-            else:
-                folder = os.path.expanduser('~/Desktop/{}/'.format(carpeta))
-                download_files(filelist, folder)
+            try:
+                ftp.retrlines(command, writeline)
+            except:
+                file.close()
+                print_log('Archivo {} no encontrado.'.format(files[1]))
+                os.remove(archivo_nuevo)
 
-            ftp.quit()
-            print_log('Tiempo: {:.2f}'.format(time.time() - start))
-        except:
-            print_log('Error al conectar. Chequear VPN o datos ingresados.')
+        ftp.quit()
 
 
 def add_caso():
@@ -251,7 +254,7 @@ if __name__ == "__main__":
 
     ui.pushButton.clicked.connect(about)
 
-    ui.pushDownload.clicked.connect(comenzar_descarga)
+    ui.pushDownload.clicked.connect(inicio_descarga)
     ui.pushClearAll.clicked.connect(reset_all)
 
     atexit.register(save_state)
