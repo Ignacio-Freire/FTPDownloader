@@ -16,7 +16,10 @@ def print_log(message):
 
 
 def inicio_descarga():
+
     start = time.time()
+
+    return_code = True
 
     req = ui.lineReq.text()
 
@@ -35,9 +38,13 @@ def inicio_descarga():
     for caso, nombre in enumerate(tests):
         carpeta_caso = carpeta_base + 'Caso {} - {}/'.format(caso + 1, nombre)
         os.makedirs(carpeta_caso)
-        descargar(test_files, carpeta_caso, nombre_caso=nombre, num_caso=caso + 1)
+        return_code = descargar(test_files, carpeta_caso, nombre_caso=nombre, num_caso=caso + 1)
 
-    descargar(singe_files, carpeta_base)
+        if return_code == False:
+            break
+
+    if return_code:
+        descargar(singe_files, carpeta_base)
 
     print_log('Tiempo: {:.2f}'.format(time.time() - start))
 
@@ -61,7 +68,7 @@ def descargar(archivos, path, **kwargs):
             ftp.login(user, passwd=passw)
         except:
             print_log('Error en la conexión al servidor. Chequear datos, VPN o red.')
-            pass
+            return False
 
         for files in archivos:
             if nombre_caso != '' and num_caso != '':
@@ -88,6 +95,7 @@ def descargar(archivos, path, **kwargs):
 
         ftp.quit()
 
+    return True
 
 def add_caso():
     test = ui.lineCaso.text()
