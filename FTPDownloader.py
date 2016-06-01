@@ -91,10 +91,10 @@ def descargar(archivos, path, **kwargs):
             ftp.retrlines(command, writeline)
         except all_errors:
             file.close()
-            print_log('Archivo {} no encontrado.'.format(files[1]))
+            print_log('Archivo {} no encontrado.'.format(archivo))
             os.remove(archivo_nuevo)
 
-    ftp.quit()
+            ftp.quit()
 
     return True
 
@@ -140,9 +140,12 @@ def load_archivos():
 
 
 def clear_pruebas():
-    tests.clear()
-    ui.listPruebas.clear()
-    load_casos()
+    confirm = del_confirmation('Reset', 'Desea borrar todas las pruebas?')
+
+    if confirm == gui.QMessageBox.Yes:
+        tests.clear()
+        ui.listPruebas.clear()
+        load_casos()
 
 
 def clear_archivos():
@@ -222,8 +225,15 @@ def save_state():
         pickle.dump([tests, filelist, save_ip, save_pass, save_req, save_user], s)
 
 
+def del_confirmation(title, message):
+    choice = gui.QMessageBox.question(gui.QMessageBox(), title, message, gui.QMessageBox.Yes | gui.QMessageBox.No,
+                                      gui.QMessageBox.No)
+    return choice
+
+
 def about():
-    print_log('\'FTPDownlader 2016\'© - Ignacio Freire')
+    gui.QMessageBox.information(gui.QMessageBox(), 'About', '  \'FTPDownlader 2016\'© \n Creado por Ignacio Freire',
+                                gui.QMessageBox.Ok)
 
 
 if __name__ == "__main__":
