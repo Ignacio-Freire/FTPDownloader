@@ -142,16 +142,19 @@ def load_archivos():
 def clear_pruebas():
     confirm = del_confirmation('Reset', 'Desea borrar todas las pruebas?')
 
-    if confirm == gui.QMessageBox.Yes:
+    if confirm == gui.QtWidgets.QMessageBox.Yes:
         tests.clear()
         ui.listPruebas.clear()
         load_casos()
 
 
 def clear_archivos():
-    filelist.clear()
-    ui.listArchivos.clear()
-    load_archivos()
+    confirm = del_confirmation('Reset', 'Desea borrar todos los archivos?')
+
+    if confirm == gui.QtWidgets.QMessageBox.Yes:
+        filelist.clear()
+        ui.listArchivos.clear()
+        load_archivos()
 
 
 def borrar_caso():
@@ -205,14 +208,18 @@ def renombrar_archivo():
 
 
 def reset_all():
-    clear_archivos()
-    clear_pruebas()
-    ui.lineReq.clear()
-    ui.lineCaso.clear()
-    ui.lineNombreMainframe.clear()
-    ui.lineNombre.clear()
-    ui.checkTx.setCheckState(0)
-    ui.plainTextLog.clear()
+    confirm = del_confirmation('Reset', 'Se borrarán todos los datos,\n'
+                                        'excepto la info de login.\n'
+                                        'Desea continuar?')
+    if confirm == gui.QtWidgets.QMessageBox.Yes:
+        clear_archivos()
+        clear_pruebas()
+        ui.lineReq.clear()
+        ui.lineCaso.clear()
+        ui.lineNombreMainframe.clear()
+        ui.lineNombre.clear()
+        ui.checkTx.setCheckState(0)
+        ui.plainTextLog.clear()
 
 
 def save_state():
@@ -226,14 +233,16 @@ def save_state():
 
 
 def del_confirmation(title, message):
-    choice = gui.QMessageBox.question(gui.QMessageBox(), title, message, gui.QMessageBox.Yes | gui.QMessageBox.No,
-                                      gui.QMessageBox.No)
+    choice = gui.QtWidgets.QMessageBox.question(gui.QtWidgets.QMessageBox(), title, message,
+                                                gui.QtWidgets.QMessageBox.Yes | gui.QtWidgets.QMessageBox.No,
+                                                gui.QtWidgets.QMessageBox.No)
     return choice
 
 
 def about():
-    gui.QMessageBox.information(gui.QMessageBox(), 'About', '  \'FTPDownlader 2016\'© \n Creado por Ignacio Freire',
-                                gui.QMessageBox.Ok)
+    gui.QtWidgets.QMessageBox.information(gui.QtWidgets.QMessageBox(), 'About',
+                                          '  \'FTPDownlader 2016\'© \n Creado por Ignacio Freire',
+                                          gui.QtWidgets.QMessageBox.Ok)
 
 
 if __name__ == "__main__":

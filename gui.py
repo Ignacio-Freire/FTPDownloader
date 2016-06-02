@@ -7,8 +7,6 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import (QDialog, QGridLayout, QHBoxLayout, QLabel,
-                             QLineEdit, QMessageBox, QPushButton, QTextEdit, QVBoxLayout, QWidget)
 
 
 class Ui_MainWindow(object):
