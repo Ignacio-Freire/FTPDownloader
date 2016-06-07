@@ -91,7 +91,7 @@ def descargar(archivos, path, **kwargs):
             ftp.retrlines(command, writeline)
         except all_errors:
             file.close()
-            print_log('Archivo {} no encontrado.'.format(archivo))
+            print_log('Archivo {} no encontrado.'.format(files[1]))
             os.remove(archivo_nuevo)
 
             ftp.quit()

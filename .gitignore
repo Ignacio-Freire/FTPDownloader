@@ -4,6 +4,9 @@ ehthumbs.db
 
 # Folder config file
 Desktop.ini
+FTPDownloader.spec
+build/*
+dist/*
 
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
