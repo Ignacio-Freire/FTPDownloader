@@ -59,7 +59,7 @@ def descargar(archivos, path, **kwargs):
     ip = ui.lineIP.text()
 
     def writeline(line):
-        file.write(line + "\n")
+        file.write(line + "\r\n")
 
     if not ip or not user or not passw:
         print_log('Datos de conexion incorrectos o faltantes.')
@@ -89,12 +89,7 @@ def descargar(archivos, path, **kwargs):
             file = codecs.open(archivo_nuevo, 'w', "utf-8")
 
         try:
-            lines = []
-            ftp.retrlines(command, lines.append)
-
-            for line in lines:
-                file.write(line + '\r\n')
-
+            ftp.retrlines(command, writeline)
         except all_errors:
             file.close()
             print_log('Archivo {} no encontrado.'.format(files[1]))
