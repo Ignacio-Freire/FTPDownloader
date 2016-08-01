@@ -6,6 +6,7 @@ import time
 import shutil
 import pickle
 import atexit
+import codecs
 from ftplib import FTP, all_errors
 from time import strftime, localtime
 
@@ -82,19 +83,22 @@ def descargar(archivos, path, **kwargs):
         archivo_nuevo = path + archivo
 
         try:
-            file = open(archivo_nuevo, 'w')
+            file = codecs.open(archivo_nuevo, 'w', "utf-8")
         except FileExistsError:
             os.remove(archivo_nuevo)
-            file = open(archivo_nuevo, 'w')
+            file = codecs.open(archivo_nuevo, 'w', "utf-8")
 
         try:
-            ftp.retrlines(command, writeline)
+            lines = []
+            ftp.retrlines(command, lines.append)
+
+            for line in lines:
+                file.write(line + '\r\n')
+
         except all_errors:
             file.close()
             print_log('Archivo {} no encontrado.'.format(files[1]))
             os.remove(archivo_nuevo)
-
-            ftp.quit()
 
     return True
 
