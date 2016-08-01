@@ -16,7 +16,7 @@ def print_log(message):
     ui.plainTextLog.appendPlainText(log)
 
 
-def inicio_descarga():
+def prepara_descarga():
     print_log('Comenzando descargas.')
     start = time.time()
 
@@ -282,7 +282,7 @@ if __name__ == "__main__":
 
     ui.pushButton.clicked.connect(about)
 
-    ui.pushDownload.clicked.connect(inicio_descarga)
+    ui.pushDownload.clicked.connect(prepara_descarga)
     ui.pushClearAll.clicked.connect(reset_all)
 
     atexit.register(save_state)
