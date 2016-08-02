@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'BajadaEvidencias.ui'
+# Form implementation generated from reading ui file 'FTPDownloader.ui'
 #
 # Created by: PyQt5 UI code generator 5.6
 #
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -77,7 +76,7 @@ class Ui_MainWindow(object):
         self.pushClearPruebas.setGeometry(QtCore.QRect(200, 390, 51, 23))
         self.pushClearPruebas.setObjectName("pushClearPruebas")
         self.pushClearAll = QtWidgets.QPushButton(self.centralwidget)
-        self.pushClearAll.setGeometry(QtCore.QRect(320, 620, 75, 23))
+        self.pushClearAll.setGeometry(QtCore.QRect(319, 620, 75, 23))
         self.pushClearAll.setObjectName("pushClearAll")
         self.pushDownload = QtWidgets.QPushButton(self.centralwidget)
         self.pushDownload.setGeometry(QtCore.QRect(240, 620, 75, 23))
@@ -90,7 +89,7 @@ class Ui_MainWindow(object):
         self.label_9.setGeometry(QtCore.QRect(600, 342, 47, 13))
         self.label_9.setObjectName("label_9")
         self.label_10 = QtWidgets.QLabel(self.centralwidget)
-        self.label_10.setGeometry(QtCore.QRect(306, 430, 20, 20))
+        self.label_10.setGeometry(QtCore.QRect(304, 430, 20, 20))
         self.label_10.setObjectName("label_10")
         self.label_11 = QtWidgets.QLabel(self.centralwidget)
         self.label_11.setGeometry(QtCore.QRect(12, 37, 100, 30))
@@ -98,7 +97,7 @@ class Ui_MainWindow(object):
         self.lineReq = QtWidgets.QLineEdit(self.centralwidget)
         self.lineReq.setGeometry(QtCore.QRect(12, 61, 261, 19))
         self.lineReq.setInputMask("")
-        self.lineReq.setAlignment(QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
+        self.lineReq.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.lineReq.setPlaceholderText("")
         self.lineReq.setObjectName("lineReq")
         self.pushRenameArchivo = QtWidgets.QPushButton(self.centralwidget)
@@ -135,12 +134,17 @@ class Ui_MainWindow(object):
         self.line_3.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line_3.setObjectName("line_3")
         self.plainTextLog = QtWidgets.QPlainTextEdit(self.centralwidget)
-        self.plainTextLog.setGeometry(QtCore.QRect(10, 450, 611, 161))
-        self.plainTextLog.setTextInteractionFlags(QtCore.Qt.TextSelectableByKeyboard | QtCore.Qt.TextSelectableByMouse)
+        self.plainTextLog.setGeometry(QtCore.QRect(10, 450, 611, 160))
+        self.plainTextLog.setTextInteractionFlags(QtCore.Qt.TextSelectableByKeyboard|QtCore.Qt.TextSelectableByMouse)
         self.plainTextLog.setObjectName("plainTextLog")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setGeometry(QtCore.QRect(617, 635, 16, 16))
         self.pushButton.setObjectName("pushButton")
+        self.progressBar = QtWidgets.QProgressBar(self.centralwidget)
+        self.progressBar.setGeometry(QtCore.QRect(10, 610, 611, 5))
+        self.progressBar.setProperty("value", 0)
+        self.progressBar.setTextVisible(False)
+        self.progressBar.setObjectName("progressBar")
         self.label.raise_()
         self.lineIP.raise_()
         self.lineUser.raise_()
@@ -177,6 +181,7 @@ class Ui_MainWindow(object):
         self.line_3.raise_()
         self.plainTextLog.raise_()
         self.pushButton.raise_()
+        self.progressBar.raise_()
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -187,14 +192,12 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "FTPDownloader"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Mainframe Downloader"))
         self.label.setText(_translate("MainWindow", "<html><head/><body><p>IP:</p></body></html>"))
         self.label_2.setText(_translate("MainWindow", "<html><head/><body><p>User:</p></body></html>"))
         self.label_3.setText(_translate("MainWindow", "<html><head/><body><p>Password:</p></body></html>"))
-        self.label_4.setText(_translate("MainWindow",
-                                        "<html><head/><body><p><span style=\" font-size:10pt;\">Pruebas</span></p></body></html>"))
-        self.label_5.setText(_translate("MainWindow",
-                                        "<html><head/><body><p><span style=\" font-size:10pt;\">Archivos</span></p></body></html>"))
+        self.label_4.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt;\">Pruebas</span></p></body></html>"))
+        self.label_5.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt;\">Archivos</span></p></body></html>"))
         self.label_6.setText(_translate("MainWindow", "<html><head/><body><p>Caso</p></body></html>"))
         self.label_7.setText(_translate("MainWindow", "<html><head/><body><p>Nombre</p></body></html>"))
         self.label_8.setText(_translate("MainWindow", "<html><head/><body><p>Archivo en Mainframe</p></body></html>"))
@@ -204,14 +207,12 @@ class Ui_MainWindow(object):
         self.pushClearPruebas.setText(_translate("MainWindow", "Reset"))
         self.pushClearAll.setText(_translate("MainWindow", "Reset"))
         self.pushDownload.setText(_translate("MainWindow", "Descargar"))
-        self.label_9.setText(_translate("MainWindow",
-                                        "<html><head/><body><p><span style=\" font-weight:600;\">.Tx</span></p></body></html>"))
-        self.label_10.setText(_translate("MainWindow",
-                                         "<html><head/><body><p><span style=\" font-weight:600;\">Log</span></p></body></html>"))
-        self.label_11.setText(_translate("MainWindow",
-                                         "<html><head/><body><p><span style=\" font-size:10pt;\">Requerimiento</span></p></body></html>"))
+        self.label_9.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-weight:600;\">.Tx</span></p></body></html>"))
+        self.label_10.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-weight:600;\">Log</span></p></body></html>"))
+        self.label_11.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt;\">Requerimiento</span></p></body></html>"))
         self.pushRenameArchivo.setText(_translate("MainWindow", "Renombrar"))
         self.pushDeleteArchivo.setText(_translate("MainWindow", "Eliminar"))
         self.pushAddArchivo.setText(_translate("MainWindow", "Agregar"))
         self.pushClearArchivos.setText(_translate("MainWindow", "Reset"))
         self.pushButton.setText(_translate("MainWindow", "i"))
+

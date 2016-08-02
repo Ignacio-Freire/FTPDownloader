@@ -14,11 +14,13 @@ from time import strftime, localtime
 def print_log(message):
     log = '[{}] {}'.format(strftime("%H:%M:%S", localtime()), message)
     ui.plainTextLog.appendPlainText(log)
+    app.processEvents()
 
 
 def prepara_descarga():
     print_log('Comenzando descargas.')
     start = time.time()
+    progress = 0
 
     return_code = True
 
@@ -36,23 +38,32 @@ def prepara_descarga():
     test_files = [i for i in filelist if i[2] == True]
     singe_files = [i for i in filelist if i[2] == False]
 
+    increment = 100 / (len(test_files) * len(tests) + len(singe_files))
+
     for caso, nombre in enumerate(tests):
         carpeta_caso = carpeta_base + 'Caso {} - {}/'.format(caso + 1, nombre)
         os.makedirs(carpeta_caso)
-        return_code = descargar(test_files, carpeta_caso, nombre_caso=nombre, num_caso=caso + 1)
+        return_code, prog = descargar(test_files, carpeta_caso, nombre_caso=nombre, num_caso=caso + 1,
+                                      down_increment=increment, down_progress=progress)
 
+        progress = prog
         if not return_code:
             break
 
     if return_code:
-        descargar(singe_files, carpeta_base)
+        return_code, prog = descargar(singe_files, carpeta_base, down_increment=increment, down_progress=progress)
+        progress += prog
+        ui.progressBar.setValue(prog)
+
         print_log('Descargas finalizadas.')
         print_log('Tiempo: {:.2f}'.format(time.time() - start))
 
 
 def descargar(archivos, path, **kwargs):
     nombre_caso = kwargs.get('nombre_caso', '')
-    num_caso = kwargs.get('num_caso', 1)
+    num_caso = kwargs.get('num_caso', 0)
+    d_increment = kwargs.get('down_increment', 0)
+    d_progress = kwargs.get('down_progress', 0)
 
     user = ui.lineUser.text()
     passw = ui.linePass.text()
@@ -62,7 +73,7 @@ def descargar(archivos, path, **kwargs):
         file.write(line + "\r\n")
 
     if not ip or not user or not passw:
-        print_log('Datos de conexion incorrectos o faltantes.')
+        print_log('Datos de conexion faltantes.')
         return False
 
     try:
@@ -73,10 +84,16 @@ def descargar(archivos, path, **kwargs):
         return False
 
     for files in archivos:
+
+        mig = []
+        is_mig = False
+
         if nombre_caso and num_caso:
+            ftp.retrlines('LIST \'{}.T{}\''.format(files[1], num_caso), mig.append)
             archivo = '{} - {}.txt'.format(files[0] if files[0] else files[1], nombre_caso)
             command = 'RETR \'{}.T{}\''.format(files[1], num_caso)
         else:
+            ftp.retrlines('LIST \'{}\''.format(files[1]), mig.append)
             archivo = '{}.txt'.format(files[0] if files[0] else files[1])
             command = 'RETR \'{}\''.format(files[1])
 
@@ -88,14 +105,29 @@ def descargar(archivos, path, **kwargs):
             os.remove(archivo_nuevo)
             file = codecs.open(archivo_nuevo, 'w', "utf-8")
 
+        if 'Migrated' in mig[1]:
+            print_log('Desmigrando {}{}. Puede que no responda la pantalla, no cerrar.'.format(files[1], '.T{}'.format(
+                num_caso) if num_caso != 0 else ''))
+            is_mig = True
+
         try:
             ftp.retrlines(command, writeline)
+            d_progress += d_increment
+            app.processEvents()
         except all_errors:
             file.close()
-            print_log('Archivo {} no encontrado.'.format(files[1]))
+            print_log('No se encontró el archivo {}{}.'.format(files[1], ' del caso {}'.format(
+                num_caso) if num_caso != 0 else ''))
             os.remove(archivo_nuevo)
 
-    return True
+        file.close()
+
+        if is_mig:
+            print_log('Desmigrado.')
+
+        ui.progressBar.setValue(d_progress)
+
+    return True, d_progress
 
 
 def add_caso():
@@ -240,7 +272,7 @@ def del_confirmation(title, message):
 
 def about():
     gui.QtWidgets.QMessageBox.information(gui.QtWidgets.QMessageBox(), 'About',
-                                          '  \'FTPDownlader 2016\'© \n Creado por Ignacio Freire',
+                                          '  \'FTPDownlader 2016\' \n         Ignacio Freire',
                                           gui.QtWidgets.QMessageBox.Ok)
 
 
