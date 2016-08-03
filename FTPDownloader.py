@@ -106,8 +106,8 @@ def descargar(archivos, path, **kwargs):
             file = codecs.open(archivo_nuevo, 'w', "utf-8")
 
         if 'Migrated' in mig[1]:
-            print_log('Desmigrando {}{}. Puede que no responda la pantalla, no cerrar.'.format(files[1], '.T{}'.format(
-                num_caso) if num_caso != 0 else ''))
+            print_log('Desmigrando {}{}. Puede que no responda la pantalla en caso de que tarde más de lo esperado,'
+                      ' no cerrar.'.format(files[1], '.T{}'.format(num_caso) if num_caso != 0 else ''))
             is_mig = True
 
         try:
