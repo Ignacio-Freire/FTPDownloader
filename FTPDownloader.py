@@ -9,6 +9,7 @@ import codecs
 from ftplib import FTP, all_errors
 from time import strftime, localtime
 from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox
+from PyQt5.QtCore import QThread, pyqtSignal, QObject
 
 
 class MainWindow(QMainWindow, gui.Ui_MainWindow):
@@ -45,13 +46,10 @@ class MainWindow(QMainWindow, gui.Ui_MainWindow):
 
         self.pushButton.clicked.connect(about)
 
-        self.pushDownload.clicked.connect(self.nothing)
+        self.pushDownload.clicked.connect(self.start_downloads)
         self.pushClearAll.clicked.connect(self.reset_all)
 
         atexit.register(self.save_state)
-
-    def nothing(self):
-        pass
 
     def print_log(self, message):
         log = '[{}] {}'.format(strftime("%H:%M:%S", localtime()), message)
@@ -177,6 +175,139 @@ class MainWindow(QMainWindow, gui.Ui_MainWindow):
 
         with open(self.filename, 'wb') as s:
             pickle.dump([self.tests, self.filelist, save_ip, save_pass, save_req, save_user], s)
+
+    def start_downloads(self):
+        downloader = Downloader(self.lineIP, self.lineUser, self.linePass, self.lineReq, self.filelist, self.tests)
+        self.progressBar.setMaximum(len(self.tests) * len(self.filelist))
+        self.progressBar.setValue(0)
+        downloader.log.connect(self.print_log)
+        downloader.progress.connect(self.descargado)
+        downloader.start()
+
+    def descargado(self):
+        self.progressBar.setValue(self.progressBar.value()+1)
+
+
+class Downloader(QThread):
+
+    log = pyqtSignal(str)
+    progress = pyqtSignal()
+
+    def __init__(self, ip, user, passw, req, archivos, casos):
+        QThread.__init__(self)
+
+        self.c_ip = ip
+        self.c_user = user
+        self.c_passw = passw
+        self.c_req = req
+        self.c_archivos = archivos
+        self.c_casos = casos
+
+    def __del__(self):
+        self.wait()
+
+    def run(self):
+        self.prepara_descarga()
+        pass
+
+    def prepara_descarga(self):
+        self.log.emit('Comenzando descargas.')
+        start = time.time()
+
+        return_code = True
+
+        reqs = self.c_req
+        print(reqs)
+        nombre_carpeta = reqs if reqs else 'Archivos descargados'
+        carpeta_base = os.path.expanduser('~/Desktop/{}/'.format(nombre_carpeta))
+
+        try:
+            print(carpeta_base)
+            os.makedirs(carpeta_base)
+        except FileExistsError:
+            shutil.rmtree(carpeta_base)
+            os.makedirs(carpeta_base)
+
+        test_files = [i for i in self.c_archivos if i[2] == True]
+        singe_files = [i for i in self.c_archivos if i[2] == False]
+
+        for caso, nombre in enumerate(self.c_casos):
+            carpeta_caso = carpeta_base + 'Caso {} - {}/'.format(caso + 1, nombre)
+            os.makedirs(carpeta_caso)
+            return_code = self.descargar(test_files, carpeta_caso, nombre_caso=nombre, num_caso=caso + 1)
+
+            if not return_code:
+                break
+
+        if return_code:
+            return_code = self.descargar(singe_files, carpeta_base)
+
+            self.log.emit('Descargas finalizadas.')
+            self.log.emit('Tiempo: {:.2f}'.format(time.time() - start))
+
+    def descargar(self, archivos, path, **kwargs):
+        nombre_caso = kwargs.get('nombre_caso', '')
+        num_caso = kwargs.get('num_caso', 0)
+
+        user = self.c_user
+        passw = self.c_passw
+        ip = self.c_ip
+
+        def writeline(line):
+            file.write(line + "\r\n")
+
+        if not ip or not user or not passw:
+            self.log.emit('Datos de conexion faltantes.')
+            return False
+
+        try:
+            ftp = FTP(ip)
+            ftp.login(user, passwd=passw)
+        except all_errors:
+            self.log.emit('Error en la conexión al servidor. Chequear datos, VPN o red.')
+            return False
+
+        for files in archivos:
+
+            mig = []
+            is_mig = False
+
+            if nombre_caso and num_caso:
+                ftp.retrlines('LIST \'{}.T{}\''.format(files[1], num_caso), mig.append)
+                archivo = '{} - {}.txt'.format(files[0] if files[0] else files[1], nombre_caso)
+                command = 'RETR \'{}.T{}\''.format(files[1], num_caso)
+            else:
+                ftp.retrlines('LIST \'{}\''.format(files[1]), mig.append)
+                archivo = '{}.txt'.format(files[0] if files[0] else files[1])
+                command = 'RETR \'{}\''.format(files[1])
+
+            archivo_nuevo = path + archivo
+
+            try:
+                file = codecs.open(archivo_nuevo, 'w', "utf-8")
+            except FileExistsError:
+                os.remove(archivo_nuevo)
+                file = codecs.open(archivo_nuevo, 'w', "utf-8")
+
+            if 'Migrated' in mig[1]:
+                self.log.emit('Desmigrando {}{}.'.format(files[1], '.T{}'.format(num_caso) if num_caso != 0 else ''))
+                is_mig = True
+
+            try:
+                ftp.retrlines(command, writeline)
+                self.progress.emit()
+            except all_errors:
+                file.close()
+                self.log.emit('No se encontró el archivo {}{}.'.format(files[1], ' del caso {}'.format(
+                    num_caso) if num_caso != 0 else ''))
+                os.remove(archivo_nuevo)
+
+            file.close()
+
+            if is_mig:
+                self.log.emit('Desmigrado.')
+
+        return True
 
 
 def main():
