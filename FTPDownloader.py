@@ -177,7 +177,8 @@ class MainWindow(QMainWindow, gui.Ui_MainWindow):
             pickle.dump([self.tests, self.filelist, save_ip, save_pass, save_req, save_user], s)
 
     def start_downloads(self):
-        downloader = Downloader(self.lineIP, self.lineUser, self.linePass, self.lineReq, self.filelist, self.tests)
+        downloader = Downloader(self.lineIP.text(), self.lineUser.text(), self.linePass.text(), self.lineReq.text(),
+                                self.filelist, self.tests)
         self.progressBar.setMaximum(len(self.tests) * len(self.filelist))
         self.progressBar.setValue(0)
         downloader.log.connect(self.print_log)
@@ -185,11 +186,10 @@ class MainWindow(QMainWindow, gui.Ui_MainWindow):
         downloader.start()
 
     def descargado(self):
-        self.progressBar.setValue(self.progressBar.value()+1)
+        self.progressBar.setValue(self.progressBar.value() + 1)
 
 
 class Downloader(QThread):
-
     log = pyqtSignal(str)
     progress = pyqtSignal()
 
@@ -222,7 +222,6 @@ class Downloader(QThread):
         carpeta_base = os.path.expanduser('~/Desktop/{}/'.format(nombre_carpeta))
 
         try:
-            print(carpeta_base)
             os.makedirs(carpeta_base)
         except FileExistsError:
             shutil.rmtree(carpeta_base)
@@ -237,11 +236,11 @@ class Downloader(QThread):
             return_code = self.descargar(test_files, carpeta_caso, nombre_caso=nombre, num_caso=caso + 1)
 
             if not return_code:
+                shutil.rmtree(carpeta_base)
                 break
 
         if return_code:
-            return_code = self.descargar(singe_files, carpeta_base)
-
+            self.descargar(singe_files, carpeta_base)
             self.log.emit('Descargas finalizadas.')
             self.log.emit('Tiempo: {:.2f}'.format(time.time() - start))
 
