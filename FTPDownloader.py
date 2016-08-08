@@ -8,12 +8,11 @@ import atexit
 import codecs
 from ftplib import FTP, all_errors
 from time import strftime, localtime
-from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox, QFileDialog
 from PyQt5.QtCore import QThread, pyqtSignal, QObject
 
 
 class MainWindow(QMainWindow, gui.Ui_MainWindow):
-
     def __init__(self):
         super(self.__class__, self).__init__()
         self.setupUi(self)
@@ -36,13 +35,18 @@ class MainWindow(QMainWindow, gui.Ui_MainWindow):
         self.load_archivos()
         self.load_casos()
 
-        self.downloader = Downloader(self.lineIP.text(), self.lineUser.text(), self.linePass.text(), self.lineReq.text(),
-                                self.filelist, self.tests)
+        self.downloader = Downloader(self.lineIP.text(), self.lineUser.text(), self.linePass.text(),
+                                     self.lineReq.text(), self.filelist, self.tests)
         self.downloader.moveToThread(self.thread)
         self.downloader.log.connect(self.print_log)
         self.downloader.progress.connect(self.descargado)
         self.thread.started.connect(self.downloader.prepara_descarga)
         self.downloader.finished.connect(self.thread.terminate)
+
+        self.actionNuevo.triggered.connect(self.reset_all)
+        self.actionLoad.triggered.connect(self.load_template)
+        self.actionSave.triggered.connect(self.save_as)
+        self.actionCerrar.triggered.connect(exit)
 
         self.pushAddPrueba.clicked.connect(self.add_caso)
         self.lineCaso.returnPressed.connect(self.add_caso)
@@ -55,21 +59,43 @@ class MainWindow(QMainWindow, gui.Ui_MainWindow):
         self.pushRenamePrueba.clicked.connect(self.renombrar_caso)
         self.pushRenameArchivo.clicked.connect(self.renombrar_archivo)
 
-        self.actionNuevo.triggered.connect(self.test)
-        self.actionLoad.triggered.connect(self.test)
-        self.actionSave.triggered.connect(self.test)
-        self.actionCerrar.triggered.connect(exit)
+        self.pushDownload.clicked.connect(self.start_downloads)
+        self.pushStop.clicked.connect(self.stop_process)
 
         self.pushButton.clicked.connect(about)
 
-        self.pushDownload.clicked.connect(self.start_downloads)
-        self.pushStop.clicked.connect(self.stop_process)
-        self.pushClearAll.clicked.connect(self.reset_all)
-
         atexit.register(self.save_state)
 
-    def test(self):
-        self.print_log('Placeholder')
+    def save_as(self):
+        filename = QFileDialog.getSaveFileName(QFileDialog(), 'Guardar como', os.path.expanduser('~/Documents/'),
+                                               '*.pickle')
+
+        if filename[0]:
+            save_ip = self.lineIP.text()
+            save_user = self.lineUser.text()
+            save_pass = self.linePass.text()
+            save_req = self.lineReq.text()
+
+            with open(filename[0] + '.pickle', 'wb') as s:
+                pickle.dump([self.tests, self.filelist, save_ip, save_pass, save_req, save_user], s)
+
+            self.print_log('Se guardo la plantilla en {}'.format(filename[0]))
+
+    def load_template(self):
+
+        filename = QFileDialog.getOpenFileName(QFileDialog(), 'Abrir', os.path.expanduser('~/Documents/'), '*.pickle')
+        if filename[0]:
+            with open(filename[0], 'rb') as f:
+                self.tests, self.filelist, self.loadIP, self.loadPass, self.loadReq, self.loadUser = pickle.load(f)
+
+            self.lineIP.setText(self.loadIP)
+            self.lineUser.setText(self.loadUser)
+            self.linePass.setText(self.loadPass)
+            self.lineReq.setText(self.loadReq)
+            self.load_archivos()
+            self.load_casos()
+
+            self.print_log('Se cargo la planitlla {}'.format(filename[0]))
 
     def print_log(self, message):
         log = '[{}] {}'.format(strftime("%H:%M:%S", localtime()), message)

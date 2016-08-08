@@ -28,8 +28,8 @@
       <file leaf-file-name="FTPDownloader.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/FTPDownloader.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="128">
-              <caret line="68" column="40" selection-start-line="68" selection-start-column="40" selection-end-line="68" selection-end-column="40" />
+            <state relative-caret-position="177">
+              <caret line="84" column="0" selection-start-line="84" selection-start-column="0" selection-end-line="84" selection-end-column="0" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -40,8 +40,8 @@
       <file leaf-file-name="gui.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gui.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="349">
-              <caret line="144" column="48" selection-start-line="144" selection-start-column="48" selection-end-line="144" selection-end-column="48" />
+            <state relative-caret-position="281">
+              <caret line="140" column="48" selection-start-line="140" selection-start-column="48" selection-end-line="140" selection-end-column="48" />
               <folding />
             </state>
           </provider>
@@ -656,7 +656,14 @@
       <option name="project" value="LOCAL" />
       <updated>1470675344209</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="Se agrego menu para guardar templates.">
+      <created>1470684676708</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1470684676708</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TodoView">
@@ -681,7 +688,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329582" sideWeight="0.49702382" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27009645" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1511254" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -723,7 +730,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="false" />
-    <MESSAGE value="Se agrego error handling y tiempo de corrida." />
     <MESSAGE value="Nombre de autor agregado" />
     <MESSAGE value="Se creo una interfaz gráfica." />
     <MESSAGE value="Se agrego Log y save state." />
@@ -748,7 +754,8 @@
     <MESSAGE value="Se rearmo el código para ser más acorde a los estandares de PyQt" />
     <MESSAGE value="Multithreading listo con opcion para cancerlar descarga." />
     <MESSAGE value="Se arreglo iteración de lista que estaba de más." />
-    <option name="LAST_COMMIT_MESSAGE" value="Se arreglo iteración de lista que estaba de más." />
+    <MESSAGE value="Se agrego menu para guardar templates." />
+    <option name="LAST_COMMIT_MESSAGE" value="Se agrego menu para guardar templates." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1100,16 +1107,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/gui.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="349">
-          <caret line="144" column="48" selection-start-line="144" selection-start-column="48" selection-end-line="144" selection-end-column="48" />
+        <state relative-caret-position="281">
+          <caret line="140" column="48" selection-start-line="140" selection-start-column="48" selection-end-line="140" selection-end-column="48" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/FTPDownloader.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="128">
-          <caret line="68" column="40" selection-start-line="68" selection-start-column="40" selection-end-line="68" selection-end-column="40" />
+        <state relative-caret-position="177">
+          <caret line="84" column="0" selection-start-line="84" selection-start-column="0" selection-end-line="84" selection-end-column="0" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>

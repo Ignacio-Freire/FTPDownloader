@@ -263,19 +263,6 @@
      <string>Reset</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushClearAll">
-    <property name="geometry">
-     <rect>
-      <x>500</x>
-      <y>40</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Limpiar todo</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pushDownload">
     <property name="geometry">
      <rect>
@@ -547,7 +534,6 @@
    <zorder>checkTx</zorder>
    <zorder>label_9</zorder>
    <zorder>pushDownload</zorder>
-   <zorder>pushClearAll</zorder>
    <zorder>label_10</zorder>
    <zorder>label_11</zorder>
    <zorder>lineReq</zorder>
@@ -579,9 +565,9 @@
     <property name="title">
      <string>Menu</string>
     </property>
+    <addaction name="actionLoad"/>
     <addaction name="actionNuevo"/>
     <addaction name="actionSave"/>
-    <addaction name="actionLoad"/>
     <addaction name="separator"/>
     <addaction name="actionCerrar"/>
    </widget>
