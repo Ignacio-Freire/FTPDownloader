@@ -230,6 +230,8 @@ class Downloader(QObject):
         start = time.time()
 
         return_code = True
+        test_files = []
+        singe_files = []
 
         reqs = self.c_req
         nombre_carpeta = reqs if reqs else 'Archivos descargados'
@@ -242,8 +244,11 @@ class Downloader(QObject):
             os.makedirs(carpeta_base)
 
         if not self.stop:
-            test_files = [i for i in self.c_archivos if i[2] == True]
-            singe_files = [i for i in self.c_archivos if i[2] == False]
+            for i in self.c_archivos:
+                if i[2]:
+                    test_files.append(i)
+                else:
+                    singe_files.append(i)
 
         for caso, nombre in enumerate(self.c_casos):
             if not self.stop:
