@@ -260,22 +260,22 @@
    <widget class="QPushButton" name="pushClearAll">
     <property name="geometry">
      <rect>
-      <x>319</x>
-      <y>620</y>
+      <x>500</x>
+      <y>53</y>
       <width>75</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
-     <string>Reset</string>
+     <string>Limpiar todo</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushDownload">
     <property name="geometry">
      <rect>
-      <x>240</x>
+      <x>244</x>
       <y>620</y>
-      <width>75</width>
+      <width>71</width>
       <height>23</height>
      </rect>
     </property>
@@ -313,7 +313,7 @@
     <property name="geometry">
      <rect>
       <x>304</x>
-      <y>430</y>
+      <y>433</y>
       <width>20</width>
       <height>20</height>
      </rect>
@@ -507,6 +507,19 @@
      <bool>false</bool>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushStop">
+    <property name="geometry">
+     <rect>
+      <x>314</x>
+      <y>620</y>
+      <width>71</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Cancelar</string>
+    </property>
+   </widget>
    <zorder>label</zorder>
    <zorder>lineIP</zorder>
    <zorder>lineUser</zorder>
@@ -544,6 +557,7 @@
    <zorder>plainTextLog</zorder>
    <zorder>pushButton</zorder>
    <zorder>progressBar</zorder>
+   <zorder>pushStop</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
