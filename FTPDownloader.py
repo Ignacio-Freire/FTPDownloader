@@ -55,6 +55,11 @@ class MainWindow(QMainWindow, gui.Ui_MainWindow):
         self.pushRenamePrueba.clicked.connect(self.renombrar_caso)
         self.pushRenameArchivo.clicked.connect(self.renombrar_archivo)
 
+        self.actionNuevo.triggered.connect(self.test)
+        self.actionLoad.triggered.connect(self.test)
+        self.actionSave.triggered.connect(self.test)
+        self.actionCerrar.triggered.connect(exit)
+
         self.pushButton.clicked.connect(about)
 
         self.pushDownload.clicked.connect(self.start_downloads)
@@ -62,6 +67,9 @@ class MainWindow(QMainWindow, gui.Ui_MainWindow):
         self.pushClearAll.clicked.connect(self.reset_all)
 
         atexit.register(self.save_state)
+
+    def test(self):
+        self.print_log('Placeholder')
 
     def print_log(self, message):
         log = '[{}] {}'.format(strftime("%H:%M:%S", localtime()), message)
