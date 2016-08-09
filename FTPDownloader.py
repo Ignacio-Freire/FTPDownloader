@@ -21,7 +21,7 @@ class MainWindow(QMainWindow, gui.Ui_MainWindow):
 
         self.tests = []
         self.filelist = []
-        self.filename = os.path.expanduser('~/Documents/FTPDownloader.pickle')
+        self.filename = os.path.expanduser('~/Documents/FTPDownloaderDefault.pickle')
 
         if os.path.isfile(self.filename):
             with open(self.filename, 'rb') as f:
@@ -46,7 +46,7 @@ class MainWindow(QMainWindow, gui.Ui_MainWindow):
         self.actionNuevo.triggered.connect(self.reset_all)
         self.actionLoad.triggered.connect(self.load_template)
         self.actionSave.triggered.connect(self.save_as)
-        self.actionCerrar.triggered.connect(exit)
+        self.actionCerrar.triggered.connect(sys.exit)
 
         self.pushAddPrueba.clicked.connect(self.add_caso)
         self.lineCaso.returnPressed.connect(self.add_caso)
