@@ -474,14 +474,14 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>617</x>
-      <y>635</y>
-      <width>16</width>
-      <height>16</height>
+      <x>627</x>
+      <y>0</y>
+      <width>5</width>
+      <height>5</height>
      </rect>
     </property>
     <property name="text">
-     <string>i</string>
+     <string/>
     </property>
    </widget>
    <widget class="QProgressBar" name="progressBar">

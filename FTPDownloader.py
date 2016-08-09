@@ -231,7 +231,10 @@ class MainWindow(QMainWindow, gui.Ui_MainWindow):
             self.print_log('Hay una descarga en proceso. Cancelar o reintentar al finalizar.')
 
     def stop_process(self):
-        self.downloader.cancelar.emit()
+        if self.thread.isRunning():
+            self.downloader.cancelar.emit()
+        else:
+            self.print_log('No hay descargas en curso.')
 
     def descargado(self):
         self.progressBar.setValue(self.progressBar.value() + 1)
@@ -354,12 +357,11 @@ class Downloader(QObject):
 
                 if 'Migrated' in mig[1] and not self.stop:
                     self.log.emit('Desmigrando {}{}.'
-                                  ' Puede tardar varios minutos dependiendo el nivel de mirgación.'
-                                  .format(files[1], '.T{}'.format(num_caso) if num_caso != 0 else ''))
+                                  ' Puede tardar varios minutos.'
+                                  .format(files[1].upper(), '.T{}'.format(num_caso) if num_caso != 0 else ''))
                     is_mig = True
 
                     while is_mig:
-                        print('desmig')
                         if not self.stop:
                             break
                 elif self.stop:
@@ -373,7 +375,7 @@ class Downloader(QObject):
                         return False
                 except all_errors:
                     file.close()
-                    self.log.emit('No se encontró el archivo {}{}.'.format(files[1], ' del caso {}'.format(
+                    self.log.emit('No se encontró el archivo {}{}.'.format(files[1].upper(), ' del caso {}'.format(
                         num_caso) if num_caso != 0 else ''))
                     os.remove(archivo_nuevo)
 
@@ -402,7 +404,7 @@ def del_confirmation(title, message):
 
 def about():
     gui.QtWidgets.QMessageBox.information(gui.QtWidgets.QMessageBox(), 'About',
-                                          '  \'FTPDownlader 2016\' \n         Ignacio Freire',
+                                          '  \'FTPDownloader 2016\' \n         Ignacio Freire',
                                           QMessageBox.Ok)
 
 
