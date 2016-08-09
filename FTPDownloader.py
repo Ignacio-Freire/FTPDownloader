@@ -62,7 +62,7 @@ class MainWindow(QMainWindow, gui.Ui_MainWindow):
         self.pushDownload.clicked.connect(self.start_downloads)
         self.pushStop.clicked.connect(self.stop_process)
 
-        self.pushButton.clicked.connect(about)
+        self.pushButton.clicked.connect(self.about)
 
         atexit.register(self.save_state)
 
@@ -138,7 +138,7 @@ class MainWindow(QMainWindow, gui.Ui_MainWindow):
             self.print_log('Nombre en Mainframe vacio.')
 
     def clear_archivos(self):
-        confirm = del_confirmation('Reset', 'Desea borrar todos los archivos?')
+        confirm = self.del_confirmation('Reset', 'Desea borrar todos los archivos?')
 
         if confirm == gui.QtWidgets.QMessageBox.Yes:
             self.filelist.clear()
@@ -146,7 +146,7 @@ class MainWindow(QMainWindow, gui.Ui_MainWindow):
             self.load_archivos()
 
     def clear_pruebas(self):
-        confirm = del_confirmation('Reset', 'Desea borrar todas las pruebas?')
+        confirm = self.del_confirmation('Reset', 'Desea borrar todas las pruebas?')
 
         if confirm == gui.QtWidgets.QMessageBox.Yes:
             self.tests.clear()
@@ -200,7 +200,7 @@ class MainWindow(QMainWindow, gui.Ui_MainWindow):
             self.load_archivos()
 
     def reset_all(self):
-        confirm = del_confirmation('Reset', 'Se borrarán todos los datos,\n'
+        confirm = self.del_confirmation('Reset', 'Se borrarán todos los datos,\n'
                                             'excepto la info de login.\n'
                                             'Desea continuar?')
         if confirm == QMessageBox.Yes:
@@ -238,6 +238,14 @@ class MainWindow(QMainWindow, gui.Ui_MainWindow):
 
     def descargado(self):
         self.progressBar.setValue(self.progressBar.value() + 1)
+
+    def about(self):
+        QMessageBox.information(self, 'About', '  \'FTPDownloader 2016\' \n        Ignacio Freire',
+                                QMessageBox.Ok)
+
+    def del_confirmation(self, title, message):
+        choice = QMessageBox.question(self, title, message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        return choice
 
 
 class Downloader(QObject):
@@ -393,20 +401,6 @@ def main():
     ui = MainWindow()
     ui.show()
     app.exec_()
-
-
-def del_confirmation(title, message):
-    choice = QMessageBox.question(QMessageBox(), title, message,
-                                  QMessageBox.Yes | QMessageBox.No,
-                                  QMessageBox.No)
-    return choice
-
-
-def about():
-    gui.QtWidgets.QMessageBox.information(gui.QtWidgets.QMessageBox(), 'About',
-                                          '  \'FTPDownloader 2016\' \n         Ignacio Freire',
-                                          QMessageBox.Ok)
-
 
 if __name__ == '__main__':
     main()
