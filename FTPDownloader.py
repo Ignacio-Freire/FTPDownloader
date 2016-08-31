@@ -41,7 +41,7 @@ class MainWindow(QMainWindow, gui.Ui_MainWindow):
         self.downloader.log.connect(self.print_log)
         self.downloader.progress.connect(self.descargado)
         self.thread.started.connect(self.downloader.prepara_descarga)
-        self.downloader.finished.connect(self.thread.terminate)
+        self.downloader.finished.connect(self.terminado)
 
         self.actionNuevo.triggered.connect(self.reset_all)
         self.actionLoad.triggered.connect(self.load_template)
@@ -101,12 +101,13 @@ class MainWindow(QMainWindow, gui.Ui_MainWindow):
     def load_list(self):
         filename = QFileDialog.getOpenFileName(QFileDialog(), 'Abrir')
 
-        with open(filename[0], 'r') as f:
-            files = f.read().splitlines()
+        if filename[0]:
+            with open(filename[0], 'r') as f:
+                files = f.read().splitlines()
 
-        for i in files:
-            self.filelist.append(('', i.upper(), False))
-            self.load_archivos()
+            for i in files:
+                self.filelist.append(('', i.upper(), False))
+                self.load_archivos()
 
     def print_log(self, message):
         log = '[{}] {}'.format(strftime("%H:%M:%S", localtime()), message)
@@ -241,6 +242,11 @@ class MainWindow(QMainWindow, gui.Ui_MainWindow):
         else:
             self.print_log('Hay una descarga en proceso. Cancelar o reintentar al finalizar.')
 
+    def terminado(self):
+        self.thread.terminate()
+        self.progressBar.setValue(len(self.tests) * len(self.filelist))
+
+
     def stop_process(self):
         if self.thread.isRunning():
             self.downloader.cancelar.emit()
@@ -359,11 +365,11 @@ class Downloader(QObject):
 
                 if nombre_caso and num_caso:
                     ftp.retrlines('LIST \'{}.T{}\''.format(files[1], num_caso), mig.append)
-                    archivo = '{} - {}.txt'.format(files[0] if files[0] else files[1], nombre_caso)
+                    archivo = '{} - {}'.format(files[0] if files[0] else files[1], nombre_caso)
                     command = 'RETR \'{}.T{}\''.format(files[1], num_caso)
                 else:
                     ftp.retrlines('LIST \'{}\''.format(files[1]), mig.append)
-                    archivo = '{}.txt'.format(files[0] if files[0] else files[1])
+                    archivo = '{}'.format(files[0] if files[0] else files[1])
                     command = 'RETR \'{}\''.format(files[1])
 
                 archivo_nuevo = path + archivo
