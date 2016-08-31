@@ -358,7 +358,7 @@
    <widget class="QPushButton" name="pushRenameArchivo">
     <property name="geometry">
      <rect>
-      <x>440</x>
+      <x>410</x>
       <y>377</y>
       <width>62</width>
       <height>23</height>
@@ -371,7 +371,7 @@
    <widget class="QPushButton" name="pushDeleteArchivo">
     <property name="geometry">
      <rect>
-      <x>374</x>
+      <x>344</x>
       <y>377</y>
       <width>51</width>
       <height>23</height>
@@ -384,7 +384,7 @@
    <widget class="QPushButton" name="pushAddArchivo">
     <property name="geometry">
      <rect>
-      <x>308</x>
+      <x>278</x>
       <y>377</y>
       <width>51</width>
       <height>23</height>
@@ -397,7 +397,7 @@
    <widget class="QPushButton" name="pushClearArchivos">
     <property name="geometry">
      <rect>
-      <x>520</x>
+      <x>490</x>
       <y>377</y>
       <width>51</width>
       <height>23</height>
@@ -521,6 +521,19 @@
      <string>Cancelar</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushCargarArchivos">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>377</y>
+      <width>51</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Cargar</string>
+    </property>
+   </widget>
    <zorder>label</zorder>
    <zorder>lineIP</zorder>
    <zorder>lineUser</zorder>
@@ -558,6 +571,7 @@
    <zorder>pushButton</zorder>
    <zorder>progressBar</zorder>
    <zorder>pushStop</zorder>
+   <zorder>pushCargarArchivos</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QMenuBar" name="menuBar">

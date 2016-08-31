@@ -52,6 +52,7 @@ class MainWindow(QMainWindow, gui.Ui_MainWindow):
         self.lineCaso.returnPressed.connect(self.add_caso)
         self.pushAddArchivo.clicked.connect(self.add_archivo)
         self.lineNombreMainframe.returnPressed.connect(self.add_archivo)
+        self.pushCargarArchivos.clicked.connect(self.load_list)
         self.pushClearArchivos.clicked.connect(self.clear_archivos)
         self.pushClearPruebas.clicked.connect(self.clear_pruebas)
         self.pushDeletePrueba.clicked.connect(self.borrar_caso)
@@ -96,6 +97,16 @@ class MainWindow(QMainWindow, gui.Ui_MainWindow):
             self.load_casos()
 
             self.print_log('Se cargo la planitlla {}'.format(filename[0]))
+
+    def load_list(self):
+        filename = QFileDialog.getOpenFileName(QFileDialog(), 'Abrir')
+
+        with open(filename[0], 'r') as f:
+            files = f.read().splitlines()
+
+        for i in files:
+            self.filelist.append(('', i.upper(), False))
+            self.load_archivos()
 
     def print_log(self, message):
         log = '[{}] {}'.format(strftime("%H:%M:%S", localtime()), message)
