@@ -235,8 +235,17 @@ class MainWindow(QMainWindow, gui.Ui_MainWindow):
             pickle.dump([self.tests, self.filelist, save_ip, save_pass, save_req, save_user], s)
 
     def start_downloads(self):
+
+        progress_max = 100
+
         if not self.thread.isRunning():
-            self.progressBar.setMaximum(len(self.tests) * len(self.filelist))
+            if len(self.tests) == 0:
+                progress_max = len(self.filelist)
+            else:
+                progress_max = len(self.tests) * len(self.filelist)
+            self.progressBar.setMaximum(progress_max)
+            print(progress_max)
+            print(self.progressBar.value())
             self.progressBar.setValue(0)
             self.thread.start()
         else:
@@ -246,7 +255,6 @@ class MainWindow(QMainWindow, gui.Ui_MainWindow):
         self.thread.terminate()
         self.progressBar.setValue(len(self.tests) * len(self.filelist))
 
-
     def stop_process(self):
         if self.thread.isRunning():
             self.downloader.cancelar.emit()
@@ -255,6 +263,7 @@ class MainWindow(QMainWindow, gui.Ui_MainWindow):
 
     def descargado(self):
         self.progressBar.setValue(self.progressBar.value() + 1)
+        print(self.progressBar.value())
 
     def about(self):
         QMessageBox.information(self, 'About', '  \'FTPDownloader 2016\' \n        Ignacio Freire',
@@ -345,7 +354,7 @@ class Downloader(QObject):
         ip = self.c_ip
 
         def writeline(line):
-            file.write(line + "\r\n")
+            file.write(line + "\n")
 
         if not ip or not user or not passw:
             self.log.emit('Datos de conexion faltantes.')

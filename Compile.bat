@@ -1,0 +1,1 @@
+pyinstaller FTPDownloader.py --noconsole --onefile
